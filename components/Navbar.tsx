@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { ThemeSwitcherButton } from "./ThemeSwitcher";
 import MobileNavbar from "./MobileNavbar";
-import { useTheme } from "next-themes";
 
 export const navItems = [
   {
