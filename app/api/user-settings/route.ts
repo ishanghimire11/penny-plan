@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const user = await currentUser();
-  console.log(user);
   if (!user) {
     NextResponse.json({ message: "Unauthorized", status: 403 });
     return redirect("/sign-in");
@@ -21,8 +20,6 @@ export async function GET() {
       data: { userId: user.id, currency: "USD" },
     });
   }
-
-  console.log(userSettings, "server user settings");
 
   revalidatePath("/");
   return NextResponse.json(userSettings);
