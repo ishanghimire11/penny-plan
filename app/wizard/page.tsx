@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -41,11 +40,7 @@ const page = async () => {
         </CardHeader>
         <CardContent>
           <CurrencyComboBox />
-          <p>Card Content</p>
         </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
       </Card>
       <Separator className="my-6" />
       <Button type="button" asChild className="w-full font-semibold">
