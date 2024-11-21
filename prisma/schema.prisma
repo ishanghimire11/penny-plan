@@ -2,11 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// datasource db {
-//   provider = "sqlite"
-//   // url      = env("DATABASE_URL")
-//   url      = "file:./dev.db"
-// }
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -19,13 +14,14 @@ model UserSettings {
 }
 
 model Category {
-  createdAt DateTime @default(now())
-  name      String
-  userId    String   @id
-  icon      String
-  type      String   @default("income")
+  catergoryId String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  name        String
+  userId      String
+  icon        String
+  type        String   @default("income")
 
-  @@unique([name, userId, type])
+  @@unique([name, type])
 }
 
 model Transaction {

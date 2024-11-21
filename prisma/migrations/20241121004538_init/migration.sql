@@ -8,13 +8,14 @@ CREATE TABLE "UserSettings" (
 
 -- CreateTable
 CREATE TABLE "Category" (
+    "catergoryId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "icon" TEXT NOT NULL,
     "type" TEXT NOT NULL DEFAULT 'income',
 
-    CONSTRAINT "Category_pkey" PRIMARY KEY ("userId")
+    CONSTRAINT "Category_pkey" PRIMARY KEY ("catergoryId")
 );
 
 -- CreateTable
@@ -54,7 +55,7 @@ CREATE TABLE "YearHistory" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Category_name_userId_type_key" ON "Category"("name", "userId", "type");
+CREATE UNIQUE INDEX "Category_name_type_key" ON "Category"("name", "type");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Transaction_category_key" ON "Transaction"("category");

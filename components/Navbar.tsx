@@ -57,7 +57,7 @@ export function GetNavItems() {
           <Link key={idx} href={navItem.href} className="w-full">
             <Button
               variant={"ghost"}
-              className="font-medium w-full inline-flex justify-start md:items-center md:justify-center"
+              className="w-full inline-flex justify-start md:items-center md:justify-center font-semibold"
             >
               {navItem.label}
             </Button>
