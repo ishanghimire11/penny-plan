@@ -8,6 +8,8 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "./ui/dialog";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
@@ -23,10 +25,19 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
 import CategoryPicker from "./CategoryPicker";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import { Calendar } from "./ui/calendar";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import CreateTransaction from "@/app/(dashboard)/_actions/transactions";
+import { toast } from "sonner";
+import { DateToUTCDate } from "@/lib/helpers";
 
 interface CreateTranscationDialogProps {
   trigger: React.ReactNode;
@@ -38,6 +49,9 @@ const CreateTranscationDialog = ({
   type,
 }: CreateTranscationDialogProps) => {
   const [open, setOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+
   const form = useForm<CreateTransactionSchemaType>({
     resolver: zodResolver(CreateTransactionSchema),
     defaultValues: {
@@ -46,13 +60,46 @@ const CreateTranscationDialog = ({
     },
   });
 
-  function onSubmit() {}
-
   const handleCategoryChange = useCallback(
     (value: string) => {
       form.setValue("category", value);
     },
     [form]
+  );
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: CreateTransaction,
+    onSuccess: () => {
+      toast.success(`Transaction created sucessfully`, {
+        id: "create-transaction",
+      });
+      form.reset({
+        type,
+        amount: 0,
+        category: undefined,
+        date: new Date(),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["overview"],
+      });
+
+      setOpen((prev) => !prev);
+    },
+  });
+
+  const onSubmit = useCallback(
+    (values: CreateTransactionSchemaType) => {
+      toast.loading(`Creating transaction...`, {
+        id: "create-transaction",
+      });
+
+      mutate({
+        ...values,
+        date: DateToUTCDate(values.date),
+      });
+    },
+    [mutate]
   );
 
   return (
@@ -104,29 +151,93 @@ const CreateTranscationDialog = ({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="category"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <FormControl>
-                    <CategoryPicker
-                      type={type}
-                      onChange={handleCategoryChange}
-                    />
-                  </FormControl>
-                  <FormDescription>Select a category</FormDescription>
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="category"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="block">Category</FormLabel>
+                    <FormControl>
+                      <CategoryPicker
+                        type={type}
+                        onChange={handleCategoryChange}
+                      />
+                    </FormControl>
+                    <FormDescription>Select a category</FormDescription>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="block">Transaction Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "justify-start w-full text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="p-0 w-[262px]">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
+                          className="!w-[223px]"
+                        ></Calendar>
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>Date of the transaction</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            {/* 
             <div className="flex items-center justify-between mt-0">
               <Button type="submit" className="mt-0">
                 Submit
               </Button>
-            </div>
+            </div> */}
           </form>
         </Form>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant={"secondary"}
+              onClick={() => form.reset()}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button
+            type="submit"
+            onClick={form.handleSubmit(onSubmit)}
+            disabled={isPending}
+          >
+            {!isPending && "Create"}
+            {isPending && <Loader2 className="animate-spin" />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

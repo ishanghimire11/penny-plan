@@ -52,7 +52,7 @@ const CategoryPicker = ({ type, onChange }: CategoryPickerProps) => {
       <PopoverTrigger asChild>
         <Button
           type="button"
-          className="w-[200px] justify-between ml-2"
+          className="w-full justify-between"
           variant={"outline"}
         >
           {selectedCategory ? (
@@ -63,7 +63,7 @@ const CategoryPicker = ({ type, onChange }: CategoryPickerProps) => {
           <ChevronsUpDownIcon className="w-4 h-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent align="start" className="w-[223px] p-0">
         <Command
           onSubmit={(e) => {
             e.preventDefault();

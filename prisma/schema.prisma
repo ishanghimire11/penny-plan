@@ -25,13 +25,16 @@ model Category {
 }
 
 model Transaction {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
-  amount       Float
-  description  String
-  category     String   @unique
-  categoryIcon String
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+  amount          Float
+  description     String
+  category        String   @unique
+  categoryIcon    String
+  userId          String
+  transactionDate DateTime
+  type            String
 }
 
 model MonthHistory {
