@@ -21,7 +21,7 @@ model Category {
   icon        String
   type        String   @default("income")
 
-  @@unique([name, type])
+  @@unique([name, type, userId])
 }
 
 model Transaction {
@@ -30,7 +30,7 @@ model Transaction {
   updatedAt       DateTime @default(now())
   amount          Float
   description     String
-  category        String   @unique
+  category        String
   categoryIcon    String
   userId          String
   transactionDate DateTime

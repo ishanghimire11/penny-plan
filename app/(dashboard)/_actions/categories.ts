@@ -25,12 +25,13 @@ export async function createCategory(form: CreateCategorySchemaType) {
   const existingCategory = await prisma.category.findFirst({
     where: {
       name,
+      type,
       userId: user.id,
     },
   });
 
   if (existingCategory) {
-    throw new Error("Category with this name already exists.");
+    throw new Error("Category with this name already exists under this type.");
   }
 
   const category = await prisma.category.create({
