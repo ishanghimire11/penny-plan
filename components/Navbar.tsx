@@ -1,10 +1,19 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Logo from "./Logo";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { ThemeSwitcherButton } from "./ThemeSwitcher";
-import MobileNavbar from "./MobileNavbar";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { MenuIcon } from "lucide-react";
 
 export const navItems = [
   {
@@ -31,6 +40,12 @@ const Navbar = () => {
 };
 
 function DesktopNavbar() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="hidden border-b border-separate bg-background md:block">
       <nav className="flex items-center justify-between px-8 w-full">
@@ -41,7 +56,7 @@ function DesktopNavbar() {
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <ThemeSwitcherButton />
-            <UserButton />
+            {isClient && <UserButton />}
           </div>
         </div>
       </nav>
@@ -69,3 +84,37 @@ export function GetNavItems() {
 }
 
 export default Navbar;
+
+function MobileNavbar() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  return (
+    <div className="flex border-r border-separate bg-background md:hidden py-4 px-2">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant={"link"}>
+            <MenuIcon className="w-5 h-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side={"left"}>
+          <SheetTitle className="hidden">Navitem</SheetTitle>
+          <Logo hasLogo={true} />
+          <nav className="mt-6">
+            <GetNavItems />
+          </nav>
+        </SheetContent>
+      </Sheet>
+      <div>
+        <Logo hasLogo={false} />
+      </div>
+      <div className="flex items-center gap-2 ml-auto">
+        <ThemeSwitcherButton />
+        {isClient && <UserButton />}
+      </div>
+    </div>
+  );
+}
