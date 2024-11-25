@@ -69,10 +69,7 @@ const CreateTranscationDialog = ({
 
   const { mutate, isPending } = useMutation({
     mutationFn: CreateTransaction,
-    onSuccess: () => {
-      toast.success(`Transaction created sucessfully`, {
-        id: "create-transaction",
-      });
+    onSuccess: async () => {
       form.reset({
         type,
         amount: 0,
@@ -80,11 +77,21 @@ const CreateTranscationDialog = ({
         date: new Date(),
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ["overview"],
+      toast.success(`Transaction created sucessfully`, {
+        id: "create-transaction",
       });
 
       setOpen((prev) => !prev);
+      queryClient.invalidateQueries({
+        queryKey: ["overview"],
+        refetchType: "active",
+      });
+      // queryClient.invalidateQueries({
+      //   predicate: (query) => {
+      //     console.log(query, "invalidate query");
+      //     return query.queryKey[0] === "overview";
+      //   },
+      // });
     },
   });
 

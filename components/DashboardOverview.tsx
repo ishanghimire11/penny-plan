@@ -7,6 +7,7 @@ import { DateRangePicker } from "./ui/date-range-picker";
 import { MAX_DATE_RANGE_DAYS } from "@/lib/constants";
 import { toast } from "sonner";
 import StatsCard from "./StatsCard";
+import CategoriesStats from "./CategoriesStats";
 
 const DashboardOverview = ({
   userSettings,
@@ -19,7 +20,7 @@ const DashboardOverview = ({
   });
 
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 p-6 container">
+    <div className="flex flex-wrap items-end justify-between gap-4 py-6 container mx-auto px-4">
       <h2 className="text-2xl font-bold">Overview</h2>
       <div className="flex items-center gap-3">
         <DateRangePicker
@@ -40,6 +41,12 @@ const DashboardOverview = ({
         />
       </div>
       <StatsCard
+        userSettings={userSettings}
+        from={dateRange.from}
+        to={dateRange.to}
+      />
+
+      <CategoriesStats
         userSettings={userSettings}
         from={dateRange.from}
         to={dateRange.to}

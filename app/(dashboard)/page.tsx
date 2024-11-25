@@ -23,8 +23,8 @@ const page = async () => {
 
   return (
     <div className="h-full bg-background/10">
-      <div className="border-b bg-card px-6">
-        <div className="flex flex-wrap items-center justify-between gap-6 py-8">
+      <div className="border-b bg-card">
+        <div className="flex flex-wrap items-center justify-between gap-6 py-8 px-4 container mx-auto">
           <p className="text-3xl font-bold">Welcome, {user.firstName}</p>
           <div className="flex items-center gap-4">
             <CreateTranscationDialog

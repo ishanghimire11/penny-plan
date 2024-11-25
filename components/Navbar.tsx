@@ -48,7 +48,7 @@ function DesktopNavbar() {
 
   return (
     <div className="hidden border-b border-separate bg-background md:block">
-      <nav className="flex items-center justify-between px-8 w-full">
+      <nav className="flex items-center justify-between w-full container mx-auto px-4">
         <div className="flex h-[80px] min-h-[60px] items-center gap-x-8 w-full">
           <Logo hasLogo={true} />
           <div className="h-full flex items-center gap-x-2">
@@ -93,7 +93,7 @@ function MobileNavbar() {
   }, []);
 
   return (
-    <div className="flex border-r border-separate bg-background md:hidden py-4 px-2">
+    <div className="flex border-r border-separate bg-background md:hidden py-4 px-4">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant={"link"}>
