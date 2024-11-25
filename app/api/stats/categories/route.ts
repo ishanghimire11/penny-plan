@@ -49,6 +49,5 @@ const getCategotyStats = async (userId: string, from: Date, to: Date) => {
       },
     },
   });
-  console.log(stats, "server stats");
   return stats;
 };

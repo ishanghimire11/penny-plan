@@ -26,9 +26,7 @@ interface StatCardProps {
 const StatsCard = ({ userSettings, to, from }: StatsCardsProps) => {
   const getStats = async () => {
     const res = await fetch(
-      `/api/stats/balance?from=${DateToUTCDate(from)}&to=${DateToUTCDate(
-        to
-      )}&t=${Date.now()}`
+      `/api/stats/balance?from=${DateToUTCDate(from)}&to=${DateToUTCDate(to)}`
     );
     return res.json();
   };

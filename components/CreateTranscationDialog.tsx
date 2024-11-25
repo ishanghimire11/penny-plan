@@ -56,7 +56,6 @@ const CreateTranscationDialog = ({
     resolver: zodResolver(CreateTransactionSchema),
     defaultValues: {
       type,
-      date: new Date(),
     },
   });
 
@@ -74,40 +73,30 @@ const CreateTranscationDialog = ({
         type,
         amount: 0,
         category: undefined,
-        date: new Date(),
+        date: undefined,
       });
 
       toast.success(`Transaction created sucessfully`, {
         id: "create-transaction",
       });
 
-      setOpen((prev) => !prev);
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["overview"],
-        refetchType: "active",
       });
-      // queryClient.invalidateQueries({
-      //   predicate: (query) => {
-      //     console.log(query, "invalidate query");
-      //     return query.queryKey[0] === "overview";
-      //   },
-      // });
+
+      setOpen((prev) => !prev);
     },
   });
 
-  const onSubmit = useCallback(
-    (values: CreateTransactionSchemaType) => {
-      toast.loading(`Creating transaction...`, {
-        id: "create-transaction",
-      });
-
-      mutate({
-        ...values,
-        date: DateToUTCDate(values.date),
-      });
-    },
-    [mutate]
-  );
+  const onSubmit = (values: CreateTransactionSchemaType) => {
+    toast.loading(`Creating transaction...`, {
+      id: "create-transaction",
+    });
+    mutate({
+      ...values,
+      date: DateToUTCDate(values.date),
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -217,12 +206,6 @@ const CreateTranscationDialog = ({
                 )}
               />
             </div>
-            {/* 
-            <div className="flex items-center justify-between mt-0">
-              <Button type="submit" className="mt-0">
-                Submit
-              </Button>
-            </div> */}
           </form>
         </Form>
 

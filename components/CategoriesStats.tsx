@@ -10,7 +10,6 @@ import { GetCategoryStatsResponseType } from "@/app/api/stats/categories/route";
 import { Card, CardHeader, CardTitle } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { Progress } from "./ui/progress";
-import { cn } from "@/lib/utils";
 
 interface CategoriesCardsProps {
   userSettings: UserSettings;
