@@ -1,5 +1,6 @@
 import CreateTranscationDialog from "@/components/CreateTranscationDialog";
 import DashboardOverview from "@/components/DashboardOverview";
+import History from "@/components/History";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
@@ -55,6 +56,7 @@ const page = async () => {
         </div>
       </div>
       <DashboardOverview userSettings={userSettings} />
+      <History userSettings={userSettings} />
     </div>
   );
 };
