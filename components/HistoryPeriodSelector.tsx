@@ -1,4 +1,4 @@
-import { GetHistoryPeriodReturnType } from "@/app/api/history/route";
+import { GetHistoryPeriodReturnType } from "@/app/api/history-period/route";
 import { Period, TimeFrame } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
@@ -37,7 +37,7 @@ const HistoryPeriodSelector = ({
   setTimeFrame,
 }: Props) => {
   const getHistoryPeriod = async () => {
-    const res = await fetch("/api/history");
+    const res = await fetch("/api/history-period");
     const data = await res.json();
 
     return data;
@@ -47,8 +47,6 @@ const HistoryPeriodSelector = ({
     queryKey: ["history"],
     queryFn: getHistoryPeriod,
   });
-
-  console.log(historyPeriods.data);
 
   return (
     <div className="flex flex-wrap items-center gap-4">
@@ -67,7 +65,10 @@ const HistoryPeriodSelector = ({
       </SkeletonWrapper>
 
       <div className="flex flex-wrap items-center gap-2">
-        <SkeletonWrapper isLoading={historyPeriods.isFetching}>
+        <SkeletonWrapper
+          isLoading={historyPeriods.isFetching}
+          fullWidth={false}
+        >
           <YearSelector
             period={period}
             setPeriod={setPeriod}
