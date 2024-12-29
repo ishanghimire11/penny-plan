@@ -122,7 +122,7 @@ function CategoryList({ type }: { type: TransactionType }) {
               {categoriesQuery.data.map((category: Category) => {
                 return (
                   <div
-                    key={category.catergoryId}
+                    key={category.categoryId}
                     className="border rounded-md p-4 text-center"
                   >
                     <p className="text-2xl mb-4">{category.icon}</p>
@@ -135,7 +135,7 @@ function CategoryList({ type }: { type: TransactionType }) {
                           variant="secondary"
                           type="button"
                           onClick={() =>
-                            handleCategoryDelete(category.catergoryId)
+                            handleCategoryDelete(category.categoryId)
                           }
                         >
                           <TrashIcon className="h-4 w-4" /> Delete

@@ -14,12 +14,12 @@ model UserSettings {
 }
 
 model Category {
-  catergoryId String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  name        String
-  userId      String
-  icon        String
-  type        String   @default("income")
+  categoryId String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  name       String
+  userId     String
+  icon       String
+  type       String   @default("income")
 
   @@unique([name, type, userId])
 }

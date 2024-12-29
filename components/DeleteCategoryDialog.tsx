@@ -16,7 +16,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { TraceState } from "next/dist/trace";
 import { TransactionType } from "@/lib/types";
 
 interface Props {

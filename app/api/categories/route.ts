@@ -1,12 +1,13 @@
 import prisma from "@/lib/prisma";
+
 import { currentUser } from "@clerk/nextjs/server";
+
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
+
 import { z } from "zod";
 
 const validator = z.enum(["expense", "income"]).nullable();
-
-const categoryDeleteValidator = z.string();
 
 export async function GET(request: NextRequest) {
   const user = await currentUser();
@@ -30,28 +31,4 @@ export async function GET(request: NextRequest) {
   });
 
   return NextResponse.json(categories);
-}
-
-export async function DELETE(request: NextRequest) {
-  const user = await currentUser();
-
-  if (!user) {
-    NextResponse.json({ message: "Unauthorized", status: 403 });
-    return redirect("/sign-in");
-  }
-
-  const { searchParams } = new URL(request.url);
-  const paramType = searchParams.get("categoryId");
-  const queryParams = categoryDeleteValidator.safeParse(paramType);
-  if (!queryParams.success) {
-    return NextResponse.json(queryParams.error, {
-      status: 400,
-    });
-  }
-
-  const categoryId = queryParams.data;
-
-  const categories = await prisma.category.delete({
-    where: { categoryId: categoryId },
-  });
 }
