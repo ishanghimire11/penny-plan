@@ -5,12 +5,12 @@ export const Currencies = [
     label: "$ Dollar",
     locale: "en-US",
   },
-  {
-    id: 2,
-    value: "NPR",
-    label: "रु Rupees",
-    locale: "ne-NP",
-  },
+  // {
+  //   id: 2,
+  //   value: "NPR",
+  //   label: "रु Rupees",
+  //   locale: "ne-NP",
+  // },
   {
     id: 3,
     value: "GBP",
