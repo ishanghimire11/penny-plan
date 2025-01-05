@@ -1,5 +1,4 @@
-import { GetFormatterForCurrency } from "@/lib/helpers";
-import prisma from "@/lib/prisma";
+import { getTransactionsHistory } from "@/lib/helpers";
 import { OverviewQuerySchema } from "@/schema/overview";
 
 import { currentUser } from "@clerk/nextjs/server";
@@ -37,43 +36,3 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(transactions);
 }
-
-export type GetTransactionsHistoryResponseType = Awaited<
-  ReturnType<typeof getTransactionsHistory>
->;
-
-export const getTransactionsHistory = async (
-  userId: string,
-  from: Date,
-  to: Date
-) => {
-  const userSettings = await prisma.userSettings.findUnique({
-    where: {
-      userId,
-    },
-  });
-
-  if (!userSettings) {
-    throw new Error("user settings not found");
-  }
-
-  const formatter = GetFormatterForCurrency(userSettings.currency);
-
-  const transactions = await prisma.transaction.findMany({
-    where: {
-      userId,
-      transactionDate: {
-        gte: from,
-        lte: to,
-      },
-    },
-    orderBy: {
-      transactionDate: "asc",
-    },
-  });
-
-  return transactions.map((transaction) => ({
-    ...transaction,
-    formattedAmount: formatter.format(transaction.amount),
-  }));
-};

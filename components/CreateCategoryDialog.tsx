@@ -59,6 +59,7 @@ const CreateCategoryDialog = ({
     resolver: zodResolver(CreateCategorySchema),
     defaultValues: {
       type,
+      name: "",
     },
   });
 
@@ -156,7 +157,7 @@ const CreateCategoryDialog = ({
                 <FormItem>
                   <FormLabel>Icon</FormLabel>
                   <FormControl>
-                    <Popover>
+                    <Popover modal>
                       <PopoverTrigger asChild>
                         <Button
                           type="button"
@@ -178,7 +179,7 @@ const CreateCategoryDialog = ({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-full">
+                      <PopoverContent className="w-full z-[100000000]">
                         <Picker
                           data={data}
                           onEmojiSelect={(emoji: { native: string }) => {

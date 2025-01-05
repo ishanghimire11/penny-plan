@@ -1,4 +1,5 @@
 import { Currencies } from "./currencies";
+import prisma from "./prisma";
 
 export function DateToUTCDate(date: Date) {
   return new Date(
@@ -21,17 +22,42 @@ export function GetFormatterForCurrency(currency: string) {
   });
 }
 
-// export function GetFormatterForCurrency(currency: string) {
-//   const locale = Currencies.find((curr) => curr.value === currency)?.locale;
+export type GetTransactionsHistoryResponseType = Awaited<
+  ReturnType<typeof getTransactionsHistory>
+>;
 
-//   if (!locale) {
-//     throw new Error(`Locale not found for currency: ${currency}`);
-//   }
+export const getTransactionsHistory = async (
+  userId: string,
+  from: Date,
+  to: Date
+) => {
+  const userSettings = await prisma.userSettings.findUnique({
+    where: {
+      userId,
+    },
+  });
 
-//   return new Intl.NumberFormat(locale, {
-//     style: "currency",
-//     currency,
-//     // currencyDisplay: currency === "NPR" ? "narrowSymbol" : "symbol",
-//     currencyDisplay: "symbol",
-//   });
-// }
+  if (!userSettings) {
+    throw new Error("user settings not found");
+  }
+
+  const formatter = GetFormatterForCurrency(userSettings.currency);
+
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId,
+      transactionDate: {
+        gte: from,
+        lte: to,
+      },
+    },
+    orderBy: {
+      transactionDate: "asc",
+    },
+  });
+
+  return transactions.map((transaction) => ({
+    ...transaction,
+    formattedAmount: formatter.format(transaction.amount),
+  }));
+};

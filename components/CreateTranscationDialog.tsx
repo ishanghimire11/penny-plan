@@ -171,7 +171,7 @@ const CreateTranscationDialog = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="block">Transaction Date</FormLabel>
-                    <Popover>
+                    <Popover modal>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button

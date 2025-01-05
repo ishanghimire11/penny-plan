@@ -1,4 +1,7 @@
-import { DateToUTCDate } from "@/lib/helpers";
+import {
+  DateToUTCDate,
+  GetTransactionsHistoryResponseType,
+} from "@/lib/helpers";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
 import {
@@ -12,7 +15,6 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { GetTransactionsHistoryResponseType } from "@/app/api/transactions/route";
 
 import {
   Table,
@@ -39,6 +41,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
+import DeleteTransactionDialog from "./DeleteTransactionDialog";
+import { ExportedTransactionData } from "@/lib/types";
 
 interface Props {
   from: Date;
@@ -157,7 +161,7 @@ const TransactionTable = ({ from, to }: Props) => {
     queryFn: fetchTransactions,
   });
 
-  const handleExportCSV = (data: any[]) => {
+  const handleExportCSV = (data: ExportedTransactionData[]) => {
     const csv = generateCsv(csvConfig)(data);
     download(csvConfig)(csv);
   };
@@ -228,7 +232,7 @@ const TransactionTable = ({ from, to }: Props) => {
                 category: row.original.category,
                 categoryIcon: row.original.categoryIcon,
                 description: row.original.description,
-                date: row.original.transactionDate,
+                date: `${row.original.transactionDate}`,
                 type: row.original.type,
                 formattedAmount: row.original.formattedAmount,
                 amount: row.original.amount,
@@ -325,6 +329,11 @@ function RowActions({ transaction }: { transaction: TransactionHistoryRow }) {
 
   return (
     <>
+      <DeleteTransactionDialog
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        transactionId={transaction.id}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} className="h-8 w-8 p-0">
